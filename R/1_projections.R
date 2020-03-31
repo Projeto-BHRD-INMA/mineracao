@@ -8,18 +8,21 @@
 
 # loading pck ####
 library(rgdal) 
-library(ggmap) 
+#library(ggmap) 
 library(rgeos) 
 library(maptools) 
-library(dplyr) 
-library(tidyr) 
-library(tmap) 
+#library(dplyr) 
+#library(tidyr) 
+#library(tmap)
+library(sp)
 
 # ES mining data ####
-es_mine <- readOGR(dsn = "./data/ES_dnmp_9mar20", layer = "ES") 
-#writePolyShape(es_mine, "./outputs/es_mine.shp") #saved
-sapply(es_mine@data, class) # checking data class
-es_mine@proj4string # checking projection
+es_mine <- readOGR(dsn = "./data/ES_dnmp_9mar20", layer = "ES")
+summary(es_mine)
+es_mine_wgs84 <- spTransform(es_mine, CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+plot(es_mine_wgs84, axes = T)
+writePolyShape(es_mine, "./outputs/es_mine_wgs84.shp") #saved
+
 
 # MG mining data ####
 mg_mine <- readOGR(dsn = "./data/MG_dnmp_9mar20", layer = "MG")
@@ -63,7 +66,6 @@ EPSG <- make_EPSG() # create data frame of available EPSG codes
 EPSG[grepl("WGS 84$", EPSG$note), ] # search for WGS 84 code
 es_mine84 <- spTransform(es_mine, CRS("+init=epsg:4326")) # reproject (spTransform)
 saveRDS(object = es_mine84, file = "./outputs/es_mine_wgs84.Rds") # reproject file save as df RDS
-rm(es_mine84) # remove unnecessary file
 
 # MG 
 proj4string(mg_mine) <- NA_character_ # remove CRS information 
