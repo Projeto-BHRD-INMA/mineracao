@@ -4,93 +4,71 @@
 # Kele Rocha Firmiano
 ######################################################
 
-# standardizing the projection to WGS 84
+# Some projections codes: ####
+# sirgas: 
+# +proj=longlat +ellps=GRS80 +towgs84=0,0,0 +no_defs
+
+# wgs84: 
+# +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs
+
+# Albers:
+# +proj=aea +lat_1=-5 +lat_2=-42 +lat_0=-32 +lon_0=-60 +x_0=0 +y_0=0 +ellps=aust_SA +units=m +no_defs
+
+# Goal: standardizing the projections to WGS 84
 
 # loading pck ####
-library(rgdal) 
-#library(ggmap) 
-library(rgeos) 
-library(maptools) 
-#library(dplyr) 
-#library(tidyr) 
-#library(tmap)
-library(sp)
+library(rgdal)
+library(raster)
+library(maptools)
+library(rgeos)
 
-# ES mining data ####
+# Loading shp file ####
+mg_mine <- readOGR(dsn = "./data/MG_dnmp_9mar20", layer = "MG") 
 es_mine <- readOGR(dsn = "./data/ES_dnmp_9mar20", layer = "ES")
-summary(es_mine)
-es_mine_wgs84 <- spTransform(es_mine, CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
-plot(es_mine_wgs84, axes = T)
-writePolyShape(es_mine, "./outputs/es_mine_wgs84.shp") #saved
+bhrd_lim <- readOGR(dsn = "./data/BHRD_limites", layer = "bhrd_sirgas_dissol")
+munic <- readOGR(dsn = "./data/BHRD_municipios", layer = "munic_BHRD_albers")
 
+# Checking coordinate system ####
+crs(mg_mine) # sirgas 2000
+crs(es_mine) # sirgas 2000
+crs(bhrd_lim)  # sirgas 2000
+crs(munic) # Albers
 
-# MG mining data ####
-mg_mine <- readOGR(dsn = "./data/MG_dnmp_9mar20", layer = "MG")
-#writePolyShape(mg_mine, "./outputs/mg_mine.shp") #saved
-sapply(mg_mine@data, class) # checking data class
-mg_mine@proj4string # checking projection
+# Reprojections ####
+mg_mine_wgs84 <- spTransform(mg_mine, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
-# BHRD OTTO 6 ####
-bhrd <- readOGR(dsn = "./data/BHRD_otto6") 
-#writePolyShape(bhrd, "./outputs/bhrd.shp") #saved
-sapply(bhrd@data, class) # checking data class
-bhrd@proj4string # checking projection
+es_mine_wgs84 <- spTransform(es_mine, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
-# BHRD mucipios ####
-munic <- readOGR(dsn = "./data/BHRD_municipios") 
-#writePolyShape(bhrd, "./outputs/bhrd.shp") #saved
-sapply(munic@data, class) # checking data class
-munic@proj4string # checking projection
+bhrd_lim_wgs84 <- spTransform(bhrd_lim, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
-# BHRD limites ####
-limites <- readOGR(dsn = "./data/BHRD_limites") 
-#writePolyShape(bhrd, "./outputs/bhrd.shp") #saved
-sapply(limites@data, class) # checking data class
-limites@proj4string # checking projection
+munic_wgs84 <- spTransform(munic, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
-# simple plots ####
-par(mfrow = c(1, 2), mar = c(5, 5, 4, 1))
-plot(mg_mine)
-plot(es_mine) 
+# Checking coordinate system ####
+crs(mg_mine_wgs84) # ok
+crs(es_mine_wgs84) # ok
+crs(bhrd_lim_wgs84) # ok  
+crs(munic_wgs84) # ok 
+
+# Saving reprojections shapes ####
+writeOGR(mg_mine_wgs84,"./outputs/reproj_shp", "mg_mine_wgs84", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+
+writeOGR(es_mine_wgs84,"./outputs/reproj_shp", "es_mine_wgs84", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+
+writeOGR(bhrd_lim_wgs84,"./outputs/reproj_shp", "bhrd_lim_wgs84", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+
+writeOGR(munic_wgs84,"./outputs/reproj_shp", "munic_wgs84", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+
+#testing the new shp saved ####
+par(mfrow = c(2, 2), mar = c(5, 5, 4, 1))
+mg <- readOGR(dsn = "./outputs/reproj_shp", layer = "mg_mine_wgs84")
+plot(mg, axes = TRUE)
+
+es <- readOGR(dsn = "./outputs/reproj_shp", layer = "es_mine_wgs84")
+plot(es, axes = TRUE)
+
+bhrd <- readOGR(dsn = "./outputs/reproj_shp", layer = "bhrd_lim_wgs84")
+plot(bhrd, axes = TRUE)
+
+munic <- readOGR(dsn = "./outputs/reproj_shp", layer = "munic_wgs84")
+plot(bhrd, axes = TRUE)
 dev.off()
-
-plot(bhrd)
-plot(munic)
-plot(limites)
-
-# reprojections ####
-# ES 
-proj4string(es_mine) <- NA_character_ # remove CRS information 
-proj4string(es_mine) <- CRS("+init=epsg:4674") # assign a new CRS
-EPSG <- make_EPSG() # create data frame of available EPSG codes
-EPSG[grepl("WGS 84$", EPSG$note), ] # search for WGS 84 code
-es_mine84 <- spTransform(es_mine, CRS("+init=epsg:4326")) # reproject (spTransform)
-saveRDS(object = es_mine84, file = "./outputs/es_mine_wgs84.Rds") # reproject file save as df RDS
-
-# MG 
-proj4string(mg_mine) <- NA_character_ # remove CRS information 
-proj4string(mg_mine) <- CRS("+init=epsg:4674") # assign a new CRS
-EPSG <- make_EPSG() # create data frame of available EPSG codes
-EPSG[grepl("WGS 84$", EPSG$note), ] # search for WGS 84 code
-mg_mine84 <- spTransform(mg_mine, CRS("+init=epsg:4326")) # reproject (spTransform)
-saveRDS(object = mg_mine84, file = "./outputs/mg_mine_wgs84.Rds") # reproject file save as df RDS
-rm(mg_mine84) # remove unnecessary file
-
-# BHRD municípios
-proj4string(munic) <- NA_character_ # remove CRS information 
-proj4string(munic) <- CRS("+init=epsg:29168") # assign a new CRS
-EPSG <- make_EPSG() # create data frame of available EPSG codes
-EPSG[grepl("WGS 84$", EPSG$note), ] # search for WGS 84 code
-munic84 <- spTransform(munic, CRS("+init=epsg:4326")) # reproject (spTransform)
-saveRDS(object = munic84, file = "./outputs/municipios_wgs84.Rds") # reproject file save as df RDS
-rm(munic84) # remove unnecessary file
-
-# BHRD limites
-proj4string(limites) <- NA_character_ # remove CRS information 
-proj4string(limites) <- CRS("+init=epsg:4674") # assign a new CRS
-EPSG <- make_EPSG() # create data frame of available EPSG codes
-EPSG[grepl("WGS 84$", EPSG$note), ] # search for WGS 84 code
-limites84 <- spTransform(limites, CRS("+init=epsg:4326")) # reproject (spTransform)
-saveRDS(object = limites84, file = "./outputs/limites_wgs84.Rds") # reproject file save as df RDS
-rm(limites84) # remove unnecessary file
-
