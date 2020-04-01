@@ -14,6 +14,10 @@
 # Albers:
 # +proj=aea +lat_1=-5 +lat_2=-42 +lat_0=-32 +lon_0=-60 +x_0=0 +y_0=0 +ellps=aust_SA +units=m +no_defs
 
+# If it has already a different coordinate system, we need to transform the file to Albers
+#largepol.albers <- spTransform(poligono, CRS("+proj=aea +lat_1=-5 +lat_2=-42 +lat_0=-32 +lon_0=-60 +x_0=0 +y_0=0 +ellps=aust_SA +units=m +no_defs "))
+#crs(largepol.albers)
+
 # Goal: standardizing the projections to WGS 84
 
 # loading pck ####
