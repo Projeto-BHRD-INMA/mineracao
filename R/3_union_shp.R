@@ -12,10 +12,10 @@ library(maptools)
 library(rgeos)
 
 # Loading shp file ####
-mg_bhrd_lim <- readOGR(dsn = "./ouputs/clip", layer = "clip_mg_bhrd_lim")
-es_bhrd_lim <- readOGR(dsn = "./ouputs/clip", layer = "clip_es_bhrd_lim")
-mg_bhrd_munic <- readOGR(dsn = "./ouputs/clip", layer = "clip_mg_bhrd_munic")
-es_bhrd_munic <- readOGR(dsn = "./ouputs/clip", layer = "clip_es_bhrd_munic")
+mg_bhrd_lim <- readOGR(dsn = "./outputs/clip", layer = "clip_mg_bhrd_lim")
+es_bhrd_lim <- readOGR(dsn = "./outputs/clip", layer = "clip_es_bhrd_lim")
+mg_bhrd_munic <- readOGR(dsn = "./outputs/clip", layer = "clip_mg_bhrd_munic")
+es_bhrd_munic <- readOGR(dsn = "./outputs/clip", layer = "clip_es_bhrd_munic")
 
 # Checking coordinate system ####
 crs(mg_bhrd_lim) 
@@ -41,9 +41,9 @@ plot(union_bhrd_mine_lim, col = 'brown', xlab = "union_bhrd_mine_lim", axes = TR
 plot(union_bhrd_mine_munic, col = 'brown', xlab = "union_bhrd_mine_minic", axes = TRUE)
 
 # Saving the new shp ####
-writeOGR(union_bhrd_mine_lim, "./ouputs", "union_shp", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+writeOGR(union_bhrd_mine_lim, "./outputs", "union_shp", driver = "ESRI Shapefile", overwrite_layer = TRUE)
 
-writeOGR(union_bhrd_mine_munic, "./ouputs", "union_shp", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+writeOGR(union_bhrd_mine_munic, "./outputs", "union_shp", driver = "ESRI Shapefile", overwrite_layer = TRUE)
 
 # Remove unecessary files ####
 # good to get more space if you'll continue the analysis in the sequence
