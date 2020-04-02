@@ -34,8 +34,6 @@ dev.off()
 plot(mg, col = 'blue')
 plot(es, add = TRUE, col = 'red', axes = TRUE)
 
-# Using BHRD limits to clip and union #### 
-# It was necessary to allow R run without bugs
 # Step 1: Clipping polygons
 # clipping 
 clip_mg_bhrd_lim <- gIntersection(mg, bhrd, byid = TRUE, drop_lower_td = TRUE)
@@ -45,7 +43,9 @@ clip_es_bhrd_lim <- gIntersection(es, bhrd, byid = TRUE, drop_lower_td = TRUE)
 plot(clip_mg_bhrd_lim, col = 'blue')
 plot(clip_es_bhrd_lim, add = TRUE, col = 'red', axes = TRUE)
 
-# Step 2: union clipped polygons ####
+
+# Step 2: Using BHRD limits to clip and union #### 
+# It was necessary to allow R run without bugs
 union_bhrd_mine_lim <- union(clip_mg_bhrd_lim, clip_es_bhrd_lim)
 
 # check union
