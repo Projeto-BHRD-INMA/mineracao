@@ -48,10 +48,10 @@ plot(clip_mg_bhrd_munic, col = 'green')
 plot(clip_es_bhrd_munic, add = TRUE, col = 'orange', axes = TRUE)
 
 # save new shp ####
-writeOGR(clip_mg_bhrd_lim, "./ouputs", "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
-writeOGR(clip_es_bhrd_lim, "./ouputs", "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
-writeOGR(clip_mg_bhrd_munic, "./ouputs", "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
-writeOGR(clip_es_bhrd_munic, "./ouputs", "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+writeOGR(clip_mg_bhrd_lim, "./outputs", "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+writeOGR(clip_es_bhrd_lim, "./outputs", "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+writeOGR(clip_mg_bhrd_munic, "./outputs", "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+writeOGR(clip_es_bhrd_munic, "./outputs", "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
 
 # Remove unecessary files ####
 # good to get more space if you'll continue the analysis in the sequence
