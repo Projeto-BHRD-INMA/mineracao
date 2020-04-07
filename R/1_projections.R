@@ -25,8 +25,8 @@ library(rgdal)
 library(raster)
 
 # Loading shp file ####
-mg_mine <- readOGR(dsn = "./data/MG_dnmp_9mar20", layer = "MG") 
-es_mine <- readOGR(dsn = "./data/ES_dnmp_9mar20", layer = "ES")
+mg_mine <- readOGR(dsn = "./data/MG_dnmp_7abr20", layer = "MG") 
+es_mine <- readOGR(dsn = "./data/ES_dnmp_7abr20", layer = "ES")
 bhrd_lim <- readOGR(dsn = "./data/BHRD_limites", layer = "bhrd_sirgas_dissol")
 munic <- readOGR(dsn = "./data/BHRD_municipios", layer = "munic_BHRD_albers")
 
@@ -71,6 +71,6 @@ plot(es, axes = TRUE)
 bhrd <- readOGR(dsn = "./outputs/reproj_shp", layer = "bhrd_lim_wgs84")
 plot(bhrd, axes = TRUE)
 
-munic <- readOGR(dsn = "./outputs/reproj_shp", layer = "munic_wgs84")
+munic <- readOGR(dsn = "./outputs/reproj_shp", layer = "munic_wgs84") # did not plot correctly the municipalities
 plot(bhrd, axes = TRUE)
 dev.off()
