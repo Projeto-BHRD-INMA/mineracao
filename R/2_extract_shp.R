@@ -8,7 +8,6 @@
 # Loading packages ####
 library(rgdal)
 library(raster)
-library(maptools)
 library(rgeos) # clip
 
 # Loading shp file ####
@@ -50,7 +49,6 @@ plot(clip_es_bhrd_munic, add = TRUE, col = 'orange', axes = TRUE)
 # save new shp ####
 # Test
 writeOGR(clip_mg_bhrd_lim, dsn = "./outputs", layer = "clip_mg_bhrd_lim", driver = "ESRI Shapefile", overwrite_layer = TRUE)
-
 writeOGR(clip_mg_bhrd_lim, dsn = "./outputs", layer = "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
 writeOGR(clip_es_bhrd_lim, dsn = "./outputs", layer = "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
 writeOGR(clip_mg_bhrd_munic, dsn = "./outputs", layer = "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
