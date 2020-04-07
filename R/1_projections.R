@@ -23,8 +23,6 @@
 # loading pck ####
 library(rgdal)
 library(raster)
-library(maptools)
-library(rgeos)
 
 # Loading shp file ####
 mg_mine <- readOGR(dsn = "./data/MG_dnmp_9mar20", layer = "MG") 
