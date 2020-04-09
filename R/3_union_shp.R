@@ -8,14 +8,14 @@
 # Loading packages ####
 library(rgdal)
 library(raster)
-library(maptools)
+#library(maptools)
 library(rgeos)
 
 # Loading shp file ####
-mg_bhrd_lim <- readOGR(dsn = "./outputs/clip", layer = "clip_mg_bhrd_lim")
-es_bhrd_lim <- readOGR(dsn = "./outputs/clip", layer = "clip_es_bhrd_lim")
-mg_bhrd_munic <- readOGR(dsn = "./outputs/clip", layer = "clip_mg_bhrd_munic")
-es_bhrd_munic <- readOGR(dsn = "./outputs/clip", layer = "clip_es_bhrd_munic")
+mg_bhrd_lim <- readOGR(dsn = "./outputs/clip_shp", layer = "clip_mg_bhrd_lim")
+es_bhrd_lim <- readOGR(dsn = "./outputs/clip_shp", layer = "clip_es_bhrd_lim")
+mg_bhrd_munic <- readOGR(dsn = "./outputs/clip_shp", layer = "clip_mg_bhrd_munic")
+es_bhrd_munic <- readOGR(dsn = "./outputs/clip_shp", layer = "clip_es_bhrd_munic")
 
 # Checking coordinate system ####
 crs(mg_bhrd_lim) 
@@ -31,7 +31,7 @@ plot(mg_bhrd_munic, axes = TRUE, xlab = "clip_mg_bhrd_munic")
 plot(es_bhrd_munic, axes = TRUE, xlab = "clip_es_bhrd_munic")
 dev.off()
   
-# Union shp #### 
+# Union shp ####  Problem here!!! R abort the mission hahaha
 union_bhrd_mine_lim <- union(mg_bhrd_lim, es_bhrd_lim)
 union_bhrd_mine_munic <- union(mg_bhrd_munic, es_bhrd_munic)
 
