@@ -41,9 +41,13 @@ clip_es_bhrd_lim <- es[bhrd,]
 clip_mg_bhrd_munic <- mg[munic,]
 clip_es_bhrd_munic <- es[munic,]
 
-plot(clip_mg_bhrd_lim, axes = TRUE, col = 'blue', border = 'blue')
-plot(clip_es_bhrd_lim, add = TRUE, axes = TRUE, col = 'blue', 
-     border = 'blue')
+plot(clip_mg_bhrd_lim, axes = TRUE, col = 'dark blue', border = 'dark blue')
+plot(clip_es_bhrd_lim, add = TRUE, axes = TRUE, col = 'dark green', border = 'dark green')
+plot(bhrd, add = TRUE, border = 'red')
+
+
+plot(clip_mg_bhrd_munic, axes = TRUE, col = 'dark orange', border = 'dark orange')
+plot(clip_es_bhrd_munic, add = TRUE, axes = TRUE, col = 'gray', border = 'gray')
 plot(bhrd, add = TRUE, border = 'red')
 
 # Method #2: Clipping polygons
@@ -61,9 +65,14 @@ plot(bhrd, add = TRUE, border = 'red')
 
 
 # save new shp ####
-# Test
-writeOGR(clip_mg_bhrd_lim, dsn = "./outputs", layer = "clip_mg_bhrd_lim", driver = "ESRI Shapefile", overwrite_layer = TRUE)
-writeOGR(clip_es_bhrd_lim, dsn = "./outputs", layer = "clip_es_bhrd_lim", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+writeOGR(clip_mg_bhrd_lim, dsn = "./outputs/clip_shp", layer = "clip_mg_bhrd_lim", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+
+writeOGR(clip_es_bhrd_lim, dsn = "./outputs/clip_shp", layer = "clip_es_bhrd_lim", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+
+writeOGR(clip_mg_bhrd_munic, dsn = "./outputs/clip_shp", layer = "clip_mg_bhrd_munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+
+writeOGR(clip_es_bhrd_munic, dsn = "./outputs/clip_shp", layer = "clip_es_bhrd_munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+
 #writeOGR(clip_mg_bhrd_munic, dsn = "./outputs", layer = "clip_mg_bhrd_munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
 #writeOGR(clip_es_bhrd_munic, dsn = "./outputs", layer = "clip_es_bhrd_munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
 
