@@ -33,26 +33,39 @@ dev.off()
 plot(mg, col = 'blue')
 plot(es, add = TRUE, col = 'red', axes = TRUE)
 
-# Step 1: Clipping polygons
+# Method #1: Clipping polygons by intersect
+# This way we were able to save the new polygons. Somehow mining files were not clipped by method #2.
+
+clip_mg_bhrd_lim <- mg[bhrd,]
+clip_es_bhrd_lim <- es[bhrd,]
+clip_mg_bhrd_munic <- mg[munic,]
+clip_es_bhrd_munic <- es[munic,]
+
+plot(clip_mg_bhrd_lim, axes = TRUE, col = 'blue', border = 'blue')
+plot(clip_es_bhrd_lim, add = TRUE, axes = TRUE, col = 'blue', 
+     border = 'blue')
+plot(bhrd, add = TRUE, border = 'red')
+
+# Method #2: Clipping polygons
 # clipping 
-clip_mg_bhrd_lim <- gIntersection(mg, bhrd, byid = TRUE, drop_lower_td = TRUE)
-clip_es_bhrd_lim <- gIntersection(es, bhrd, byid = TRUE, drop_lower_td = TRUE)
-clip_mg_bhrd_munic <- gIntersection(mg, munic, byid = TRUE, drop_lower_td = TRUE)
-clip_es_bhrd_munic <- gIntersection(es, munic, byid = TRUE, drop_lower_td = TRUE)
+#clip_mg_bhrd_lim <- gIntersection(mg, bhrd, byid = TRUE, drop_lower_td = TRUE)
+#clip_es_bhrd_lim <- gIntersection(es, bhrd, byid = TRUE, drop_lower_td = TRUE)
+#clip_mg_bhrd_munic <- gIntersection(mg, munic, byid = TRUE, drop_lower_td = TRUE)
+#clip_es_bhrd_munic <- gIntersection(es, munic, byid = TRUE, drop_lower_td = TRUE)
 
 # check clip 
-plot(clip_mg_bhrd_lim, col = 'blue')
-plot(clip_es_bhrd_lim, add = TRUE, col = 'red', axes = TRUE)
-plot(clip_mg_bhrd_munic, col = 'green')
-plot(clip_es_bhrd_munic, add = TRUE, col = 'orange', axes = TRUE)
+#plot(clip_mg_bhrd_lim, col = 'blue')
+#plot(clip_es_bhrd_lim, add = TRUE, col = 'red', axes = TRUE)
+#plot(clip_mg_bhrd_munic, col = 'green')
+#plot(clip_es_bhrd_munic, add = TRUE, col = 'orange', axes = TRUE)
+
 
 # save new shp ####
 # Test
 writeOGR(clip_mg_bhrd_lim, dsn = "./outputs", layer = "clip_mg_bhrd_lim", driver = "ESRI Shapefile", overwrite_layer = TRUE)
-writeOGR(clip_mg_bhrd_lim, dsn = "./outputs", layer = "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
-writeOGR(clip_es_bhrd_lim, dsn = "./outputs", layer = "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
-writeOGR(clip_mg_bhrd_munic, dsn = "./outputs", layer = "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
-writeOGR(clip_es_bhrd_munic, dsn = "./outputs", layer = "clip", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+writeOGR(clip_es_bhrd_lim, dsn = "./outputs", layer = "clip_es_bhrd_lim", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+#writeOGR(clip_mg_bhrd_munic, dsn = "./outputs", layer = "clip_mg_bhrd_munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+#writeOGR(clip_es_bhrd_munic, dsn = "./outputs", layer = "clip_es_bhrd_munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
 
 # Remove unecessary files ####
 # good to get more space if you'll continue the analysis in the sequence
@@ -60,10 +73,4 @@ rm(mg)
 rm(es)
 rm(bhrd)
 rm(munic)
-
-
-
-
-
-
 
