@@ -11,10 +11,23 @@ library(raster)
 library(rgeos) # clip
 
 # Loading shp file ####
-mg <- readOGR(dsn = "./outputs/reproj_shp", layer = "mg_mine_wgs84")
-es <- readOGR(dsn = "./outputs/reproj_shp", layer = "es_mine_wgs84")
-bhrd <- readOGR(dsn = "./outputs/reproj_shp", layer = "bhrd_lim_wgs84")
-munic <- readOGR(dsn = "./outputs/reproj_shp", layer = "munic_wgs84")
+
+mg <-
+  readOGR(dsn = "./outputs/reproj_shp",
+          layer = "mg_mine_wgs84",
+          encoding = 'UTF-8')
+es <-
+  readOGR(dsn = "./outputs/reproj_shp",
+          layer = "es_mine_wgs84",
+          encoding = 'UTF-8')
+bhrd <-
+  readOGR(dsn = "./outputs/reproj_shp",
+          layer = "bhrd_lim_wgs84",
+          encoding = 'UTF-8')
+munic <-
+  readOGR(dsn = "./outputs/reproj_shp",
+          layer = "munic_wgs84",
+          encoding = 'UTF-8')
 
 # Checking coordinate system ####
 crs(mg) 
