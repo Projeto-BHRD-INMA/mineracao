@@ -25,6 +25,7 @@ library(rgdal)
 library(raster)
 
 # Loading shp file ####
+
 mg_mine <- readOGR(dsn = "./data/MG_dnmp_7abr20", layer = "MG") 
 es_mine <- readOGR(dsn = "./data/ES_dnmp_7abr20", layer = "ES")
 bhrd_lim <- readOGR(dsn = "./data/BHRD_limites", layer = "bhrd_sirgas_dissol")

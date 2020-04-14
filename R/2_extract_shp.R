@@ -33,48 +33,58 @@ dev.off()
 plot(mg, col = 'blue')
 plot(es, add = TRUE, col = 'red', axes = TRUE)
 
-# Method #1: Clipping polygons by intersect
-# This way we were able to save the new polygons. Somehow mining files were not clipped by method #2.
+# jeito 1 - usando a funçao crop do pacote raster. esse jeito corta direitinho e cria um SpatialPolygonDataFrame. mas UCs que estão dentro e fora dos limites se perdem aqui (olhar jeito 2). ####
+crop_mg_bhrd_lim <- crop(mg, bhrd)
+crop_es_bhrd_lim <- crop(es, bhrd)
+crop_mg_bhrd_munic <- crop(mg, munic)
+crop_es_bhrd_munic <- crop(es, munic)
 
-clip_mg_bhrd_lim <- mg[bhrd,]
-clip_es_bhrd_lim <- es[bhrd,]
-clip_mg_bhrd_munic <- mg[munic,]
-clip_es_bhrd_munic <- es[munic,]
-
-plot(clip_mg_bhrd_lim, axes = TRUE, col = 'dark blue', border = 'dark blue')
-plot(clip_es_bhrd_lim, add = TRUE, axes = TRUE, col = 'dark green', border = 'dark green')
+# check clip jeito 1
+plot(crop_mg_bhrd_lim, axes = TRUE, col = 'dark blue', border = 'dark blue')
+plot(crop_es_bhrd_lim, add = TRUE, axes = TRUE, col = 'dark green', border = 'dark green')
 plot(bhrd, add = TRUE, border = 'red')
 
-
-plot(clip_mg_bhrd_munic, axes = TRUE, col = 'dark orange', border = 'dark orange')
-plot(clip_es_bhrd_munic, add = TRUE, axes = TRUE, col = 'gray', border = 'gray')
+plot(crop_mg_bhrd_munic, axes = TRUE, col = 'dark orange', border = 'dark orange')
+plot(crop_es_bhrd_munic, add = TRUE, axes = TRUE, col = 'dark gray', border = 'dark gray')
 plot(bhrd, add = TRUE, border = 'red')
 
-# Method #2: Clipping polygons
-# clipping 
-#clip_mg_bhrd_lim <- gIntersection(mg, bhrd, byid = TRUE, drop_lower_td = TRUE)
-#clip_es_bhrd_lim <- gIntersection(es, bhrd, byid = TRUE, drop_lower_td = TRUE)
-#clip_mg_bhrd_munic <- gIntersection(mg, munic, byid = TRUE, drop_lower_td = TRUE)
-#clip_es_bhrd_munic <- gIntersection(es, munic, byid = TRUE, drop_lower_td = TRUE)
+# jeito 2 - Aqui o corte nao é tao exato: ele mantem as mines que estao dentro e fora dos limites da bacia. mas, necessitamos dos 2 jeitos para criar uma coluna com a diferença da área) ####
+crop_mg_bhrd_lim_B <- mg[bhrd, ]
+crop_es_bhrd_lim_B <- es[bhrd, ]
+crop_mg_munic_lim_B <- mg[munic, ]
+crop_es_munic_lim_B <- es[munic, ]
 
-# check clip 
-#plot(clip_mg_bhrd_lim, col = 'blue')
-#plot(clip_es_bhrd_lim, add = TRUE, col = 'red', axes = TRUE)
-#plot(clip_mg_bhrd_munic, col = 'green')
-#plot(clip_es_bhrd_munic, add = TRUE, col = 'orange', axes = TRUE)
+# check clip jeito 2
+plot(crop_mg_bhrd_lim_B, axes = TRUE, col = 'dark blue', border = 'dark blue')
+plot(crop_es_bhrd_lim_B, add = TRUE, axes = TRUE, col = 'dark green', border = 'dark green')
+plot(bhrd, add = TRUE, border = 'black')
 
+plot(crop_mg_munic_lim_B, axes = TRUE, col = 'dark orange', border = 'dark orange')
+plot(crop_es_munic_lim_B, add = TRUE, axes = TRUE, col = 'dark gray', border = 'dark gray')
+plot(bhrd, add = TRUE, border = 'black')
 
-# save new shp ####
-writeOGR(clip_mg_bhrd_lim, dsn = "./outputs/clip_shp", layer = "clip_mg_bhrd_lim", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+#calculando a diferença das áreas - usando a função area do pacote raster. ####
+#primeiro calcular a área dos poligonos de cada arquivo e salvando uma coluna com a area de cada UC no dataframe de cada arquivo: 
 
-writeOGR(clip_es_bhrd_lim, dsn = "./outputs/clip_shp", layer = "clip_es_bhrd_lim", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+crop_mg_bhrd_lim$AREA_HA <- area(crop_mg_bhrd_lim) 
+crop_es_bhrd_lim$AREA_HA <- area(crop_es_bhrd_lim)
+crop_mg_bhrd_munic$AREA_HA <- area(crop_mg_bhrd_munic)
+crop_es_bhrd_munic$AREA_HA <- area(crop_es_bhrd_munic)
 
-writeOGR(clip_mg_bhrd_munic, dsn = "./outputs/clip_shp", layer = "clip_mg_bhrd_munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+#salvando uma coluna com a diferença da area (do jeito de cortar que nao corta exato - area após corte exato):
+crop_mg_bhrd_lim$dif_area <- (area(crop_mg_bhrd_lim_B) - area(crop_mg_bhrd_lim))
+crop_es_bhrd_lim$dif_area <- (area(crop_es_bhrd_lim_B) - area(crop_es_bhrd_lim))
+crop_mg_bhrd_munic$dif_area <- (area(crop_mg_munic_lim_B) - area(crop_mg_bhrd_munic))
+crop_es_bhrd_munic$dif_area <- (area(crop_es_munic_lim_B) - area(crop_es_bhrd_munic))
 
-writeOGR(clip_es_bhrd_munic, dsn = "./outputs/clip_shp", layer = "clip_es_bhrd_munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+#saving new (clipped) shapefiles ####
+writeOGR(crop_mg_bhrd_lim,"./outputs/clip_shp", "crop_mg_bhrd_lim", driver = "ESRI Shapefile", overwrite_layer = TRUE)
 
-#writeOGR(clip_mg_bhrd_munic, dsn = "./outputs", layer = "clip_mg_bhrd_munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
-#writeOGR(clip_es_bhrd_munic, dsn = "./outputs", layer = "clip_es_bhrd_munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+writeOGR(crop_es_bhrd_lim,"./outputs/clip_shp", "crop_es_bhrd_lim", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+
+writeOGR(crop_mg_bhrd_munic,"./outputs/clip_shp", "crop_mg_bhrd_munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
+
+writeOGR(crop_es_bhrd_munic,"./outputs/clip_shp", "crop_es_bhrd_munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
 
 # Remove unecessary files ####
 # good to get more space if you'll continue the analysis in the sequence
