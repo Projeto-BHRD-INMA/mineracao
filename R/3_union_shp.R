@@ -12,10 +12,22 @@ library(raster)
 library(rgeos)
 
 # Loading shp file ####
-mg_bhrd_lim <- readOGR(dsn = "./outputs/clip_shp", layer = "clip_mg_bhrd_lim")
-es_bhrd_lim <- readOGR(dsn = "./outputs/clip_shp", layer = "clip_es_bhrd_lim")
-mg_bhrd_munic <- readOGR(dsn = "./outputs/clip_shp", layer = "clip_mg_bhrd_munic")
-es_bhrd_munic <- readOGR(dsn = "./outputs/clip_shp", layer = "clip_es_bhrd_munic")
+mg_bhrd_lim <-
+  readOGR(dsn = "./outputs/clip_shp",
+          layer = "crop_mg_bhrd_lim",
+          encoding = 'UTF-8')
+es_bhrd_lim <-
+  readOGR(dsn = "./outputs/clip_shp",
+          layer = "crop_es_bhrd_lim",
+          encoding = 'UTF-8')
+mg_bhrd_munic <-
+  readOGR(dsn = "./outputs/clip_shp",
+          layer = "crop_mg_bhrd_munic",
+          encoding = 'UTF-8')
+es_bhrd_munic <-
+  readOGR(dsn = "./outputs/clip_shp",
+          layer = "crop_es_bhrd_munic",
+          encoding = 'UTF-8')
 
 # Checking coordinate system ####
 crs(mg_bhrd_lim) 
@@ -25,10 +37,10 @@ crs(es_bhrd_munic)
 
 # simple plots
 par(mfrow = c(2, 2), mar = c(5, 5, 4, 1))
-plot(mg_bhrd_lim , axes = TRUE, xlab = "clip_mg_bhrd_lim")
-plot(es_bhrd_lim, axes = TRUE, xlab = "clip_es_bhrd_lim")
-plot(mg_bhrd_munic, axes = TRUE, xlab = "clip_mg_bhrd_munic")
-plot(es_bhrd_munic, axes = TRUE, xlab = "clip_es_bhrd_munic")
+plot(mg_bhrd_lim , axes = TRUE, xlab = "mg_bhrd_lim")
+plot(es_bhrd_lim, axes = TRUE, xlab = "es_bhrd_lim")
+plot(mg_bhrd_munic, axes = TRUE, xlab = "mg_bhrd_munic")
+plot(es_bhrd_munic, axes = TRUE, xlab = "es_bhrd_munic")
 dev.off()
   
 # Union shp ####  Problem here!!! R abort the mission hahaha
