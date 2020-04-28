@@ -37,5 +37,10 @@ plot(mg_bhrd_munic, axes = TRUE, xlab = "mg_bhrd_munic")
 plot(es_bhrd_munic, axes = TRUE, xlab = "es_bhrd_munic")
 dev.off()
 
+# extracting specific polygons in a shp
+n.munic <- c("Abre Campo", "Mariana")
+ext.munic <- munic[munic$NOMEMUNIC %in% n.munic ,]
+plot(munic, axes = TRUE)
+plot(ext.munic, add = TRUE, col = "red", axes = TRUE)
 
 
