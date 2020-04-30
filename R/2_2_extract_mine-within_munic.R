@@ -38,9 +38,16 @@ plot(es_bhrd_munic, axes = TRUE, xlab = "es_bhrd_munic")
 dev.off()
 
 # extracting specific polygons in a shp
-n.munic <- c("Abre Campo", "Mariana")
-ext.munic <- munic[munic$NOMEMUNIC %in% n.munic ,]
+df.uf <- data.frame(munic$NOMEUF) # selecting uf
+df.munic <- data.frame(munic$NOMEMUNIC) # selecting municipalities
+uf.munic <- cbind(df.munic, df.uf) # combining
+es.munic <- c("Nova Venécia", "Barra de S?o Francisco", "Mantenópolis", "Vila Valério", "?guia Branca", "S?o Gabriel da Palha", "Sooretama", "Alto Rio Novo", "Pancas", "Linhares", "S?o Domingos do Norte", "Rio Bananal", "Colatina", "Baixo Guandu", "Marilândia", "Aracruz", "Itaguaçu", " S?o Roque do Cana?", "Jo?o Neiva", "Santa Teresa", "Ibiraçu", " Laranja da Terra", "Itarana", "Afonso Claúdio", "Brejetuba", "Santa Maria de Jetibá", "Domingos Martins", "Muniz Freire", "Iúna", "Ibatiba", "Conceiç?o do Castelo", "Irupi", "Venda Nova do Imigrante", "Ibitirama") # municipalities belonging to ES ## but, fail some municipalities...
+
+ext.es.munic <- munic[munic$NOMEMUNIC %in% es.munic ,] # extracting municipalities belonging ES from munic shp file atributes.
 plot(munic, axes = TRUE)
-plot(ext.munic, add = TRUE, col = "red", axes = TRUE)
+plot(ext.es.munic, add = TRUE, col = "red", axes = TRUE)
+
+#saving extracted shapefile ####
+writeOGR(ext.es.munic,"./outputs/clip_shp", "es.munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
 
 
