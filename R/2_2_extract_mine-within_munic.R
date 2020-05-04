@@ -47,31 +47,29 @@ df.munic.reg.uf <- cbind(df.munic, df.reg, df.uf) # combining all
 # JEQUITINHONHA
 jec <- c("Angelândia", "Capelinha", "Itamarandiba", "Aricanduva", "Felício dos Santos", "Presidente Kubitschek") 
 ext.jec <- munic[munic$NOMEMUNIC %in% jec,] 
+writeOGR(ext.jec,"./outputs/clip_reg_shp", "ext.jec", driver = "ESRI Shapefile", overwrite_layer = TRUE)  
 
 # VALE DO MUCURI
 muc <- c("Setubinha", "Poté", "Malacacheta", "Frei Gaspar", "Franciscópolis")
 ext.muc <- munic[munic$NOMEMUNIC %in% muc,]
-
-#  VALE DO RIO DOCE
-
-
-
-
-
-plot(munic, axes = TRUE)
-plot(ext.mg.muc, add = TRUE, col = "green", axes = TRUE)
-
-
-
-
-
-
-#saving extracted shapefiles ####
-# JEQUITINHONHA
-writeOGR(ext.jec,"./outputs/clip_reg_shp", "ext.jec", driver = "ESRI Shapefile", overwrite_layer = TRUE)  
-
-# VALE DO MUCURI
 writeOGR(ext.muc,"./outputs/clip_reg_shp", "ext.muc", driver = "ESRI Shapefile", overwrite_layer = TRUE) 
+
+#  VALE DO RIO DOCE + subregions ####
+vrd.aimores <- c("Conselheiro Pena", "Cuparaque", "Goiabeira", "Resplendor", "Itueta", "Alvarenga", "Santa Rita do Itueto", "Pocrane", "Ipanema", "Mutum", "Taparuba", "Aimorés", "Conceiç?o de Ipanema")
+ext.vrd.aimores <- munic[munic$NOMEMUNIC %in% vrd.aimores,]
+writeOGR(ext.muc,"./outputs/clip_reg_shp", "ext.vrd.aimores", driver = "ESRI Shapefile", overwrite_layer = TRUE) 
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
