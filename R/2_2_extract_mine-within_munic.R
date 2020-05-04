@@ -37,11 +37,54 @@ plot(mg_bhrd_munic, axes = TRUE, xlab = "mg_bhrd_munic")
 plot(es_bhrd_munic, axes = TRUE, xlab = "es_bhrd_munic")
 dev.off()
 
-# extracting specific polygons in a shp
+# extracting uf, municipality and zone informations ####
 df.uf <- data.frame(munic$NOMEUF) # selecting uf
 df.munic <- data.frame(munic$NOMEMUNIC) # selecting municipalities
-uf.munic <- cbind(df.munic, df.uf) # combining
-es.munic <- c("Nova Venécia", "Barra de S?o Francisco", "Mantenópolis", "Vila Valério", "?guia Branca", "S?o Gabriel da Palha", "Sooretama", "Alto Rio Novo", "Pancas", "Linhares", "S?o Domingos do Norte", "Rio Bananal", "Colatina", "Baixo Guandu", "Marilândia", "Aracruz", "Itaguaçu", " S?o Roque do Cana?", "Jo?o Neiva", "Santa Teresa", "Ibiraçu", " Laranja da Terra", "Itarana", "Afonso Claúdio", "Brejetuba", "Santa Maria de Jetibá", "Domingos Martins", "Muniz Freire", "Iúna", "Ibatiba", "Conceiç?o do Castelo", "Irupi", "Venda Nova do Imigrante", "Ibitirama") # municipalities belonging to ES ## but, fail some municipalities...
+df.reg <- data.frame(munic$NOMEMES) # selecting regions 
+df.munic.reg.uf <- cbind(df.munic, df.reg, df.uf) # combining all
+
+# Extracting munic, by regions ####
+# JEQUITINHONHA
+jec <- c("Angelândia", "Capelinha", "Itamarandiba", "Aricanduva", "Felício dos Santos", "Presidente Kubitschek") 
+ext.jec <- munic[munic$NOMEMUNIC %in% jec,] 
+
+# VALE DO MUCURI
+muc <- c("Setubinha", "Poté", "Malacacheta", "Frei Gaspar", "Franciscópolis")
+ext.muc <- munic[munic$NOMEMUNIC %in% muc,]
+
+#  VALE DO RIO DOCE
+
+
+
+
+
+plot(munic, axes = TRUE)
+plot(ext.mg.muc, add = TRUE, col = "green", axes = TRUE)
+
+
+
+
+
+
+#saving extracted shapefiles ####
+# JEQUITINHONHA
+writeOGR(ext.jec,"./outputs/clip_reg_shp", "ext.jec", driver = "ESRI Shapefile", overwrite_layer = TRUE)  
+
+# VALE DO MUCURI
+writeOGR(ext.muc,"./outputs/clip_reg_shp", "ext.muc", driver = "ESRI Shapefile", overwrite_layer = TRUE) 
+
+
+
+
+
+
+
+
+
+
+############################################
+#uf.munic <- cbind(df.munic, df.uf) # combining
+es.munic <- c("Nova Venécia", "Barra de S?o Francisco", "Mantenópolis", "Vila Valério", "?guia Branca", "S?o Gabriel da Palha", "Sooretama", "Alto Rio Novo", "Pancas", "Linhares", "S?o Domingos do Norte", "Rio Bananal", "Colatina", "Baixo Guandu", "Marilândia", "Aracruz", "Itaguaçu", "S?o Roque do Cana?", "Jo?o Neiva", "Santa Teresa", "Ibiraçu", "Laranja da Terra", "Itarana", "Afonso Claúdio", "Brejetuba", "Santa Maria de Jetibá", "Domingos Martins", "Muniz Freire", "Iúna", "Ibatiba", "Conceiç?o do Castelo", "Irupi", "Venda Nova do Imigrante", "Ibitirama")
 
 ext.es.munic <- munic[munic$NOMEMUNIC %in% es.munic ,] # extracting municipalities belonging ES from munic shp file atributes.
 plot(munic, axes = TRUE)
@@ -49,5 +92,4 @@ plot(ext.es.munic, add = TRUE, col = "red", axes = TRUE)
 
 #saving extracted shapefile ####
 writeOGR(ext.es.munic,"./outputs/clip_shp", "es.munic", driver = "ESRI Shapefile", overwrite_layer = TRUE)
-
 
