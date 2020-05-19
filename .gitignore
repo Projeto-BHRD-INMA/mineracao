@@ -1,0 +1,8 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# pastas com arquivos muito grandes pro Github
+data/DNPM_Brasil
